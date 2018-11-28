@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/insertionfinder.js",
   "scripts": {
+    "prepublish": "npm run build",
     "build": "webpack",
     "lint": "eslint --ext .js,.mjs lib"
   },
