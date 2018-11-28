@@ -1,0 +1,25 @@
+{
+  "name": "insertionfinder",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/insertionfinder.js",
+  "scripts": {
+    "build": "webpack",
+    "lint": "eslint --ext .js,.mjs lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xuanyan0x7c7/insertionfinder.js.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xuanyan0x7c7/insertionfinder.js/issues"
+  },
+  "homepage": "https://github.com/xuanyan0x7c7/insertionfinder.js#readme",
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "webpack": "^4.26.1",
+    "webpack-cli": "^3.1.2"
+  }
+}
