@@ -7,7 +7,7 @@ module.exports = [
       library: 'insertionfinder',
       libraryTarget: 'commonjs2'
     },
-    entry: {insertionfinder: './lib/index.mjs'},
+    entry: {insertionfinder: './lib/index.js'},
     target: 'node',
     mode: 'production',
     optimization: {minimize: false}
@@ -18,7 +18,7 @@ module.exports = [
       library: 'insertionfinder',
       libraryTarget: 'commonjs2'
     },
-    entry: {insertionfinder: './lib/index.mjs'},
+    entry: {insertionfinder: './lib/index.js'},
     target: 'node',
     mode: 'production'
   }
