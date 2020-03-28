@@ -21,7 +21,7 @@
   "homepage": "https://github.com/xuanyan0x7c7/insertionfinder.js#readme",
   "devDependencies": {
     "eslint": "^6.8.0",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10"
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
   }
 }
