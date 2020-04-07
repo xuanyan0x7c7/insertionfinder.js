@@ -1,6 +1,6 @@
 {
   "name": "insertionfinder",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "",
   "main": "dist/insertionfinder.js",
   "module": "lib/index.mjs",
