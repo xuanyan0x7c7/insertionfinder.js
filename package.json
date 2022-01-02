@@ -1,0 +1,48 @@
+{
+  "name": "insertionfinder",
+  "version": "0.2.4",
+  "description": "",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript",
+    "prebuild": "rimraf dist",
+    "lint": "eslint src/**/*.ts test/**/*.ts --fix",
+    "test": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha"
+  },
+  "repository": "github:xuanyan0x7c7/insertionfinder.js",
+  "author": "Xuan Yan <xuanyan@xuanyan.ws>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xuanyan0x7c7/insertionfinder.js/issues"
+  },
+  "homepage": "https://github.com/xuanyan0x7c7/insertionfinder.js#readme",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^24.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "^10.0.1",
+    "@rollup/plugin-wasm": "^6.1.1",
+    "@types/mocha": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
+    "eslint": "^8.4.1",
+    "eslint-plugin-import": "^2.25.3",
+    "mocha": "^10.2.0",
+    "rimraf": "^3.0.2",
+    "rollup": "^3.9.0",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "ts-node": "^10.4.0",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.3"
+  }
+}
