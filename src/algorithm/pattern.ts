@@ -136,7 +136,11 @@ function parseBrackets(string: string) {
       twists.push(...parseResult);
       break;
     } else {
-      let parseResult = parseString(string.slice(0, begin));
+      let firstString = string.slice(0, begin);
+      if (firstString.slice(-1) === '^') {
+        firstString = firstString.slice(0, -1);
+      }
+      let parseResult = parseString(firstString);
       if (!parseResult) {
         return null;
       }
