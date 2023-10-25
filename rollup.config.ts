@@ -1,5 +1,4 @@
 import typescript from '@rollup/plugin-typescript';
-import wasm from '@rollup/plugin-wasm';
 import { defineConfig } from 'rollup';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 
@@ -9,7 +8,7 @@ export default defineConfig({
     {
       file: 'dist/index.js',
       format: 'umd',
-      name: 'puzzle-solver',
+      name: 'insertionfinder',
       sourcemap: true,
     },
     {
@@ -20,7 +19,6 @@ export default defineConfig({
   ],
   plugins: [
     typescript({ tsconfig: './tsconfig.json' }),
-    wasm({ maxFileSize: Infinity }),
     sourcemaps(),
   ],
 });
