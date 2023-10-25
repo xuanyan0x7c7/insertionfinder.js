@@ -83,7 +83,7 @@ export default class Algorithm {
   clearFlags(placement = 0) {
     const rotation = this._inversed ? this._rotation : this._inverseRotation;
     const permutation = rotationPermutationTable[
-      centerTransformTable[centerTransformTable[rotation][placement]][inverseCenterTable[rotation]]
+      centerTransformTable[centerTransformTable[rotation][this.inversed ? placement : inverseCenterTable[placement]]][inverseCenterTable[rotation]]
     ];
     const transform = [permutation[0], permutation[2], permutation[4]];
     this._twists.push(...this._inverseTwists.map(
