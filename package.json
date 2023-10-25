@@ -15,7 +15,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript && tsc --emitDeclarationOnly --declaration",
+    "build": "rollup -c rollup.config.ts --configPlugin @rollup/plugin-typescript",
     "prebuild": "rimraf dist",
     "lint": "eslint src/**/*.ts --fix",
     "test": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' mocha"

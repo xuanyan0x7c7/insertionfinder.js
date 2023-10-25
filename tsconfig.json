@@ -9,7 +9,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "declaration": true,
-    "declarationDir": "dist",
+    "declarationDir": ".",
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
