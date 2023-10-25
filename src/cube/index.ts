@@ -341,7 +341,7 @@ export default class Cube {
   }
 
   getBestPlacement() {
-    let bestCube;
+    let bestCube = null;
     let bestCycles = 20;
     for (const index of [
       0,

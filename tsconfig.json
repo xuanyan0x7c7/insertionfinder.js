@@ -1,7 +1,6 @@
 {
   "include": [
     "src",
-    "./rollup.config.ts"
   ],
   "exclude": [
     "dist"
@@ -10,7 +9,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "declaration": true,
-    "declarationDir": ".",
+    "declarationDir": "dist",
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
