@@ -15,7 +15,7 @@ export default class Cube {
   private static rotationCubes = Cube.generateRotationCubes();
   private corners = [0, 3, 6, 9, 12, 15, 18, 21];
   private edges = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22];
-  private placement = 0;
+  private _placement = 0;
 
   private static generateTwistCubes() {
     const twistCubes: Cube[] = [];
@@ -68,16 +68,20 @@ export default class Cube {
       }
     }
     for (let placement = 0; placement < 24; ++placement) {
-      rotationCubes[placement].placement = placement;
+      rotationCubes[placement]._placement = placement;
     }
     return rotationCubes;
+  }
+
+  get placement() {
+    return this._placement;
   }
 
   clone() {
     const cube = new Cube();
     cube.corners = this.corners.slice();
     cube.edges = this.edges.slice();
-    cube.placement = this.placement;
+    cube._placement = this._placement;
     return cube;
   }
 
@@ -116,7 +120,7 @@ export default class Cube {
           this.edges = newEdges;
         }
         if (centers) {
-          this.placement = centerTransformTable[this.placement][this.placement];
+          this._placement = centerTransformTable[this._placement][this._placement];
         }
       } else {
         if (corners) {
@@ -131,7 +135,7 @@ export default class Cube {
           }
         }
         if (centers) {
-          this.placement = centerTransformTable[this.placement][item.placement];
+          this._placement = centerTransformTable[this._placement][item._placement];
         }
       }
     } else {
@@ -159,7 +163,7 @@ export default class Cube {
       edges[item >>> 1] = i << 1 | item & 1;
     }
     this.edges = edges;
-    this.placement = inverseCenterTable[this.placement];
+    this._placement = inverseCenterTable[this._placement];
   }
 
   hasParity() {
@@ -333,11 +337,11 @@ export default class Cube {
   }
 
   getCenterCycles() {
-    return centerCycleTable[this.placement];
+    return centerCycleTable[this._placement];
   }
 
   getBestPlacement() {
-    let bestCube = null;
+    let bestCube;
     let bestCycles = 20;
     for (const index of [
       0,
@@ -347,7 +351,7 @@ export default class Cube {
       6, 9, 11, 14, 18, 22,
     ]) {
       const cube = this.clone();
-      cube.rotate(inverseCenterTable[cube.placement]);
+      cube.rotate(inverseCenterTable[cube._placement]);
       cube.rotate(index);
       let cycles = cube.getCornerCycles() + cube.getEdgeCycles();
       if (centerCycleTable[index] <= 1) {
@@ -361,7 +365,7 @@ export default class Cube {
         }
       }
     }
-    return bestCube;
+    return bestCube!;
   }
 
   toFaceletString() {
@@ -383,7 +387,7 @@ export default class Cube {
         list[offset[position[0]] * 9 + Number.parseInt(position[1])] = edgeFacelets[i][j][0];
       }
     }
-    const table = rotationPermutationTable[inverseCenterTable[this.placement]];
+    const table = rotationPermutationTable[inverseCenterTable[this._placement]];
     for (let i = 0; i < 6; ++i) {
       list[i * 9 + 4] = 'UDRLFB'[table[i]];
     }
