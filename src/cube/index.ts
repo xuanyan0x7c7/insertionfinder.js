@@ -85,6 +85,14 @@ export default class Cube {
     return this._placement;
   }
 
+  getRawCorners() {
+    return this.corners.slice();
+  }
+
+  getRawEdges() {
+    return this.edges.slice();
+  }
+
   clone() {
     const cube = new Cube();
     cube.corners = this.corners.slice();
