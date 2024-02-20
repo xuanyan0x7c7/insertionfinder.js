@@ -17,6 +17,14 @@ export default class Cube {
   private edges = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22];
   private _placement = 0;
 
+  static fromCubieCube(corners: number[], edges: number[], placement: number) {
+    const cube = new Cube();
+    cube.corners = corners.slice();
+    cube.edges = edges.slice();
+    cube._placement = placement;
+    return cube;
+  }
+
   private static generateTwistCubes() {
     const twistCubes: Cube[] = [];
     for (let i = 0; i < 24; ++i) {
@@ -83,6 +91,22 @@ export default class Cube {
     cube.edges = this.edges.slice();
     cube._placement = this._placement;
     return cube;
+  }
+
+  isSolved() {
+    const cube = this.clone();
+    cube.rotate(inverseCenterTable[this._placement]);
+    for (let i = 0; i < 8; ++i) {
+      if (cube.corners[i] !== i * 3) {
+        return false;
+      }
+    }
+    for (let i = 0; i < 12; ++i) {
+      if (cube.edges[i] !== i * 2) {
+        return false;
+      }
+    }
+    return true;
   }
 
   twist(item: Algorithm | Cube | number, { corners = true, edges = true, centers = true } = {}) {
@@ -268,7 +292,7 @@ export default class Cube {
 
   getEdgeStatus() {
     const visited = new Array<boolean>(12).fill(false);
-    const list: {length: number; flip: number}[] = [];
+    const list: { length: number; flip: number }[] = [];
     for (let x = 0; x < 12; ++x) {
       if (!visited[x]) {
         let length = 0;
@@ -368,6 +392,54 @@ export default class Cube {
     return bestCube!;
   }
 
+  getEdgeOrientationStatus() {
+    const cube = this.clone();
+    cube.rotate(inverseCenterTable[this._placement]);
+    const cubeUD = cube.clone();
+    cubeUD.rotate(4);
+    const cubeRL = cube.clone();
+    cubeRL.rotate(1);
+    const cubeFB = cube.clone();
+    const result: number[] = [];
+    if (cubeUD.isEdgeOrientationSolved()) {
+      result.push(0);
+    }
+    if (cubeRL.isEdgeOrientationSolved()) {
+      result.push(2);
+    }
+    if (cubeFB.isEdgeOrientationSolved()) {
+      result.push(4);
+    }
+    return result
+      .map(item => rotationPermutationTable[this._placement][item])
+      .sort()
+      .map(item => (['UD', 'RL', 'FB'] as const)[item >>> 1]);
+  }
+
+  getDominoReductionStatus() {
+    const cube = this.clone();
+    cube.rotate(inverseCenterTable[this._placement]);
+    const cubeUD = cube.clone();
+    const cubeRL = cube.clone();
+    cubeRL.rotate(4);
+    const cubeFB = cube.clone();
+    cubeFB.rotate(16);
+    const result: number[] = [];
+    if (cubeUD.isDominoReductionSolved()) {
+      result.push(0);
+    }
+    if (cubeRL.isDominoReductionSolved()) {
+      result.push(2);
+    }
+    if (cubeFB.isDominoReductionSolved()) {
+      result.push(4);
+    }
+    return result
+      .map(item => rotationPermutationTable[this._placement][item])
+      .sort()
+      .map(item => (['UD', 'RL', 'FB'] as const)[item >>> 1]);
+  }
+
   toFaceletString() {
     const offset: Record<string, number> = { U: 0, D: 1, R: 2, L: 3, F: 4, B: 5 };
     const list = new Array<string>(54);
@@ -392,5 +464,34 @@ export default class Cube {
       list[i * 9 + 4] = 'UDRLFB'[table[i]];
     }
     return list.join('');
+  }
+
+  private isEdgeOrientationSolved() {
+    if (this._placement !== 0) {
+      return false;
+    }
+    return this.edges.every(item => (item & 1) === 0);
+  }
+
+  private isDominoReductionSolved() {
+    if (this._placement !== 0) {
+      return false;
+    }
+    for (let i = 0; i < 8; ++i) {
+      if (this.corners[i] % 3 !== 0) {
+        return false;
+      }
+    }
+    for (let i = 0; i < 8; ++i) {
+      if ((this.edges[i] & 1) !== 0 || this.edges[i] >= 16) {
+        return false;
+      }
+    }
+    for (let i = 8; i < 12; ++i) {
+      if ((this.edges[i] & 1) !== 0) {
+        return false;
+      }
+    }
+    return true;
   }
 }
