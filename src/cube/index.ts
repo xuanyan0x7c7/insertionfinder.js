@@ -403,10 +403,14 @@ export default class Cube {
   getEdgeOrientationStatus() {
     const cube = this.clone();
     cube.rotate(inverseCenterTable[this._placement]);
-    const cubeUD = cube.clone();
+    const cubeUD = new Cube();
     cubeUD.rotate(4);
+    cubeUD.twist(cube);
+    cubeUD.rotate(inverseCenterTable[4]);
     const cubeRL = cube.clone();
     cubeRL.rotate(1);
+    cubeRL.twist(cube);
+    cubeRL.rotate(inverseCenterTable[1]);
     const cubeFB = cube.clone();
     const result: number[] = [];
     if (cubeUD.isEdgeOrientationSolved()) {
@@ -428,10 +432,14 @@ export default class Cube {
     const cube = this.clone();
     cube.rotate(inverseCenterTable[this._placement]);
     const cubeUD = cube.clone();
-    const cubeRL = cube.clone();
-    cubeRL.rotate(4);
-    const cubeFB = cube.clone();
-    cubeFB.rotate(16);
+    const cubeRL = new Cube();
+    cubeRL.rotate(16);
+    cubeRL.twist(cube);
+    cubeRL.rotate(inverseCenterTable[16]);
+    const cubeFB = new Cube();
+    cubeFB.rotate(4);
+    cubeFB.twist(cube);
+    cubeFB.rotate(inverseCenterTable[4]);
     const result: number[] = [];
     if (cubeUD.isDominoReductionSolved()) {
       result.push(0);
