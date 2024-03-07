@@ -464,7 +464,7 @@ export default class Cube {
       .map(c => ({ U: 0, D: 1, R: 2, L: 3, F: 4, B: 5 }[c]!));
     for (let i = 0; i < 6; ++i) {
       for (let j = 0; j < 9; ++j) {
-        if ((facelet[j] ^ facelet[4]) & ~1) {
+        if ((facelet[i * 9 + j] ^ facelet[i * 9 + 4]) & ~1) {
           return false;
         }
       }
