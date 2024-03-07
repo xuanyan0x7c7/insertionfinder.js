@@ -456,6 +456,28 @@ export default class Cube {
       .map(item => (['UD', 'RL', 'FB'] as const)[item >>> 1]);
   }
 
+  isHalfTurnReductionSolved() {
+    if (this.hasParity()) {
+      return false;
+    }
+    const facelet = [...this.toFaceletString()]
+      .map(c => ({ U: 0, D: 1, R: 2, L: 3, F: 4, B: 5 }[c]!));
+    for (let i = 0; i < 6; ++i) {
+      for (let j = 0; j < 9; ++j) {
+        if ((facelet[j] ^ facelet[4]) & ~1) {
+          return false;
+        }
+      }
+    }
+    if ([0, 2, 6, 8].filter(i => facelet[i] === facelet[0]).length % 2 === 1) {
+      return false;
+    }
+    if ([18, 20, 27, 29].filter(i => facelet[i] === facelet[18]).length % 2 === 1) {
+      return false;
+    }
+    return true;
+  }
+
   toFaceletString() {
     const offset: Record<string, number> = { U: 0, D: 1, R: 2, L: 3, F: 4, B: 5 };
     const list = new Array<string>(54);
