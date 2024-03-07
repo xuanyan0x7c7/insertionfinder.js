@@ -407,7 +407,7 @@ export default class Cube {
     cubeUD.rotate(4);
     cubeUD.twist(cube);
     cubeUD.rotate(inverseCenterTable[4]);
-    const cubeRL = cube.clone();
+    const cubeRL = new Cube();
     cubeRL.rotate(1);
     cubeRL.twist(cube);
     cubeRL.rotate(inverseCenterTable[1]);
