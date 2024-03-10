@@ -19,6 +19,60 @@ const rotationString = [
   "z'", "z' y", "z' y2", "z' y'",
 ];
 
+function cancelTwists(twists: number[]) {
+  const length = twists.length;
+  const stacks = twists.map<number[]>(() => []);
+  const marks = twists.map(() => 2);
+  let y = -1;
+  for (let x = 0; x < length; ++x) {
+    if (y < 0 || twists[x] >>> 3 !== twists[y] >>> 3) {
+      twists[++y] = twists[x];
+      stacks[y].push(x);
+    } else if (twists[x] >>> 2 === twists[y] >>> 2) {
+      const orientation = twists[x] + twists[y] & 3;
+      if (orientation === 0) {
+        stacks[y--] = [];
+      } else {
+        twists[y] = twists[y] & ~3 | orientation;
+        stacks[y].push(x);
+      }
+    } else if (y > 0 && twists[y - 1] >>> 3 === twists[y] >>> 3) {
+      const orientation = twists[x] + twists[y - 1] & 3;
+      if (orientation === 0) {
+        twists[y - 1] = twists[y];
+        stacks[y - 1] = stacks[y];
+        stacks[y--] = [];
+      } else {
+        twists[y - 1] = twists[y - 1] & ~3 | orientation;
+        stacks[y - 1].push(x);
+      }
+    } else {
+      twists[++y] = twists[x];
+      stacks[y].push(x);
+    }
+  }
+  twists.length = y + 1;
+  for (const list of stacks) {
+    if (list.length === 1) {
+      marks[list[0]] = 0;
+    } else {
+      for (const x of list) {
+        marks[x] = 1;
+      }
+    }
+  }
+  return marks;
+}
+
+function normalizeTwists(twists: number[]) {
+  for (let i = 1; i < twists.length; ++i) {
+    if (twists[i - 1] >>> 3 === twists[i] >>> 3 && twists[i - 1] > twists[i]) {
+      [twists[i - 1], twists[i]] = [twists[i], twists[i - 1]];
+      ++i;
+    }
+  }
+}
+
 export class InvalidAlgorithmStringError extends Error {
   constructor(message: string) {
     super(message);
@@ -74,10 +128,19 @@ export default class Algorithm {
   }
 
   toString() {
-    return [
+    const string = [
       ...this._twists.map(twist => twistString[twist]),
       ...this._rotation ? [rotationString[this._rotation]] : [],
     ].join(' ');
+    const inverseString = [
+      ...this._inverseTwists.map(twist => twistString[twist]),
+      ...this._inverseRotation ? [rotationString[this._inverseRotation]] : [],
+    ].join(' ');
+    if (this._inversed) {
+      return `${string} (${inverseString})`.trim();
+    } else {
+      return `(${inverseString}) ${string}`.trim();
+    }
   }
 
   clearFlags(placement = 0) {
@@ -97,58 +160,12 @@ export default class Algorithm {
   }
 
   cancelMoves() {
-    const twists = this._twists;
-    const length = twists.length;
-    const stacks = twists.map<number[]>(() => []);
-    const marks = twists.map(() => 2);
-    let y = -1;
-    for (let x = 0; x < length; ++x) {
-      if (y < 0 || twists[x] >>> 3 !== twists[y] >>> 3) {
-        twists[++y] = twists[x];
-        stacks[y].push(x);
-      } else if (twists[x] >>> 2 === twists[y] >>> 2) {
-        const orientation = twists[x] + twists[y] & 3;
-        if (orientation === 0) {
-          stacks[y--] = [];
-        } else {
-          twists[y] = twists[y] & ~3 | orientation;
-          stacks[y].push(x);
-        }
-      } else if (y > 0 && twists[y - 1] >>> 3 === twists[y] >>> 3) {
-        const orientation = twists[x] + twists[y - 1] & 3;
-        if (orientation === 0) {
-          twists[y - 1] = twists[y];
-          stacks[y - 1] = stacks[y];
-          stacks[y--] = [];
-        } else {
-          twists[y - 1] = twists[y - 1] & ~3 | orientation;
-          stacks[y - 1].push(x);
-        }
-      } else {
-        twists[++y] = twists[x];
-        stacks[y].push(x);
-      }
-    }
-    twists.length = y + 1;
-    for (const list of stacks) {
-      if (list.length === 1) {
-        marks[list[0]] = 0;
-      } else {
-        for (const x of list) {
-          marks[x] = 1;
-        }
-      }
-    }
-    return marks;
+    cancelTwists(this._twists);
+    cancelTwists(this._inverseTwists);
   }
 
   normalize() {
-    const twists = this._twists;
-    for (let i = 1; i < twists.length; ++i) {
-      if (twists[i - 1] >>> 3 === twists[i] >>> 3 && twists[i - 1] > twists[i]) {
-        [twists[i - 1], twists[i]] = [twists[i], twists[i - 1]];
-        ++i;
-      }
-    }
+    normalizeTwists(this._twists);
+    normalizeTwists(this._inverseTwists);
   }
 }
