@@ -124,7 +124,7 @@ export default class Algorithm {
   }
 
   get length() {
-    return this._twists.length;
+    return this._twists.length + this._inverseTwists.length;
   }
 
   toString() {
@@ -162,8 +162,10 @@ export default class Algorithm {
   }
 
   cancelMoves() {
-    cancelTwists(this._twists);
-    cancelTwists(this._inverseTwists);
+    return [
+      cancelTwists(this._twists),
+      cancelTwists(this._inverseTwists),
+    ];
   }
 
   normalize() {
