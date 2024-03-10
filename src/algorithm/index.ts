@@ -138,8 +138,10 @@ export default class Algorithm {
     ].join(' ');
     if (this._inversed) {
       return `${string} (${inverseString})`.trim();
-    } else {
+    } else if (inverseString) {
       return `(${inverseString}) ${string}`.trim();
+    } else {
+      return string;
     }
   }
 
